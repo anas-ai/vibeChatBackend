@@ -1,3 +1,5 @@
-.env
-.env.local
-.env.production
+# .gitignore
+   node_modules
+   .env
+   .env.local
+   .vercel

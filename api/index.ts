@@ -4,13 +4,16 @@ import dotenv from 'dotenv';
 import connectDB from "../src/config/db.js";  
 import authRoutes from "../src/routes/auth.routes.js";  
 
+// Only needed for local development
+if (process.env.NODE_ENV !== 'production') {
+    dotenv.config();
+}
 
-dotenv.config();
 const app = express();
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
 
-connectDB()
-app.use("/api/auth", authRoutes)
+connectDB();
+app.use("/api/auth", authRoutes);
 
-export default app
+export default app;
