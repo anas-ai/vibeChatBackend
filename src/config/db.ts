@@ -1,17 +1,18 @@
 import mongoose from "mongoose";
+import dotenv from 'dotenv';
 
-const connectDB = async () => {
-  if (!process.env.MONGO_URI) {
-    throw new Error("MONGO_URI is missing in environment variables");
-  }
 
-  try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("MongoDB connected");
-  } catch (error) {
-    console.error("MongoDB connection error:", error);
-    throw error;
-  }
-};
+dotenv.config();
 
-export default connectDB;
+const connectDB = async (): Promise<void> => {
+    try {
+        await mongoose.connect(process.env.MONGO_URI as string);
+        console.log('MongoDB connected');
+
+    } catch (error) {
+        console.log("mongoDB connection error:", error);
+        process.exit(1)
+    }
+}
+
+export default connectDB
