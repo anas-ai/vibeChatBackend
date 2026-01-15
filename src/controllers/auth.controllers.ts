@@ -5,17 +5,18 @@ import { generateAccessToken, generateRefreshToken } from "../utils/token.js";
 
 export const register = async (req: Request, res: Response) => {
   try {
+
     const { email, password, name, avatar } = req.body;
-    const exists = await User.findOne({ email });
+    const exists = await User.findOne({ email })
     if (exists) return res.status(409).json({ message: "User exists" });
 
-    const hashed = await bcrypt.hash(password, 12);
-    await User.create({ email, password: hashed, name, avatar });
-    res.status(201).json({ message: "User Registered successfully" });
+    const hashed = await bcrypt.hash(password, 12)
+    await User.create({ email, password: hashed, name, avatar })
+    res.status(201).json({ message: "User Registered successfully" })
 
   } catch (error) {
     console.log("error", error);
-    res.status(500).json({ success: false, msg: "Server Error" });
+    res.status(500).json({ success: false, msg: "Server Eror" })
   }
 };
 
@@ -23,17 +24,27 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    if (!user) return res.status(401).json({ message: "Invalid credentials" });
+    if (!user) return res.status(401).json({ message: 'Invalid credentials' });
 
     const valid = await bcrypt.compare(password, user.password);
-    if (!valid) return res.status(401).json({ message: "Invalid credentials" });
+    if (!valid) return res.status(401).json({ message: "Invalid credentials" })
+
+    const UserInfo = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+      created: user.created
+    }
 
     res.json({
+      userInfo: UserInfo,
       accessToken: generateAccessToken(user._id.toString()),
-      refreshToken: generateRefreshToken(user._id.toString()),
-    });
+      refreshToken: generateRefreshToken(user._id.toString())
+    })
+
   } catch (error) {
-    console.log("error", error);
-    res.status(500).json({ sucess: false, msg: "login error" });
+    console.log('login error', error);
+    res.json(500).json({ msg: 'network error' })
   }
 };

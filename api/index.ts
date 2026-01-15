@@ -53,7 +53,6 @@ app.get("/api/test-env", (req: Request, res: Response) => {
 // API Routes
 app.use("/api/auth", authRoutes);
 
-// 404 handler
 app.use((req: Request, res: Response) => {
     res.status(404).json({
         error: "Route not found",
@@ -71,7 +70,6 @@ app.use((err: any, req: Request, res: Response, next: any) => {
     });
 });
 
-// For Vercel serverless deployment
 export default app;
 
 // For local development
