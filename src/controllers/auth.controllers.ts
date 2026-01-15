@@ -36,15 +36,17 @@ export const login = async (req: Request, res: Response) => {
       avatar: user.avatar,
       created: user.created
     }
+    const accessToken = generateAccessToken(user._id.toString());
+    const refreshToken =  generateRefreshToken(user._id.toString())
 
     res.json({
       userInfo: UserInfo,
-      accessToken: generateAccessToken(user._id.toString()),
-      refreshToken: generateRefreshToken(user._id.toString())
+      accessToken: accessToken,
+      refreshToken: refreshToken
     })
 
   } catch (error) {
     console.log('login error', error);
-    res.json(500).json({ msg: 'network error' })
+    res.json(500).json({ msg: 'login error' })
   }
 };
